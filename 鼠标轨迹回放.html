@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0
+        }
+
+        .box {
+            width: 100px;
+            height: 100px;
+            background: red;
+            position: absolute;
+            
+        }
+
+        button {
+            position: absolute;
+            right: 10px;
+            bottom: 10px;
+            width: 100px;
+            height: 100px;
+            font-size: 30px
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box"></div>
+    <button>回放</button>
+    <script>
+        var i = 0;
+        var bt = document.querySelector('button');
+        var bd = document.querySelector('body')
+        var oBox = document.querySelector('.box');
+        oBox.onmousedown = function (ev) {//拖拽产生轨迹
+            var ev = ev || window.event;
+            var sx = ev.offsetX;
+            var sy = ev.offsetY;
+            document.onmousemove = function (ev) {
+                var ev = ev || window.event;
+                var l = ev.clientX - sx;
+                var t = ev.clientY - sy;
+                oBox.style.left = l + 'px';
+                oBox.style.top = t + 'px';
+                var d = document.createElement("p");
+                d.style.cssText = 'width:3px;height:3px;background:black;position: absolute;left:' + l + 'px;top:' + t + 'px';
+                bd.appendChild(d);
+                i++;   
+            }
+            document.onmouseup = function () {
+                document.onmousemove = null;
+                document.onmouseup = null;      
+            };
+        };
+        bt.onclick = function () {//按钮回放
+            var sp = setInterval(function () {
+                    oP=document.querySelectorAll('p')
+                    i--;
+                    bd.removeChild(oP[i]);
+                    oBox.style.left = oP[i].style.left;
+                    oBox.style.top = oP[i].style.top;
+                    if (i == 0){
+                        clearInterval(sp)
+                    } 
+                }, 1
+            )
+        }
+
+
+    </script>
+</body>
+
+</html>
